@@ -1,0 +1,28 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "yarn build --project tsconfig-dev.json && concurrently -n tsc,node \"yarn tsc-watch\" \"yarn start-nodemon\"",
+    "start-nodemon": "nodemon build",
+    "build": "tsc --project tsconfig.json",
+    "tsc-watch": "tsc --project tsconfig-dev.json -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cors": "^2.8.5",
+    "@types/express": "^4.17.0",
+    "concurrently": "^4.1.1",
+    "nodemon": "^1.19.1",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "@types/node": "^12.6.8",
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
+  }
+}
