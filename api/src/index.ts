@@ -16,7 +16,7 @@ app.get("/", function(_req, res) {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-app.get("/api/fetch", (_req, res) =>
+app.get("/fetch", (_req, res) =>
   res.send(JSON.stringify({ hello: "world" })),
 );
 
