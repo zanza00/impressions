@@ -2,13 +2,13 @@ version: '3'
 
 services:
   api:
-    image: cuebiq-api:latest
+    build: api
     ports:
       - "3001:3001"
     networks: 
       - cuebiq-network
   client:
-    image: cuebiq-web:latest
+    build: web
     ports:
       - "80:80"
     networks: 
