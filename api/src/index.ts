@@ -12,10 +12,6 @@ if (process.env.NODE_ENV !== "production") {
   console.log("App not running in production, using cors middleware");
 }
 
-app.get("/", function(_req, res) {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
-
 app.get("/fetch", (_req, res) =>
   res.send(JSON.stringify({ hello: "world" })),
 );
