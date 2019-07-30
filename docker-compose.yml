@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  api:
+    image: cuebiq-api:latest
+    ports:
+      - "3001:3001"
+    networks: 
+      - cuebiq-network
+  client:
+    image: cuebiq-web:latest
+    ports:
+      - "80:80"
+    networks: 
+      - cuebiq-network
+networks:
+  cuebiq-network:
+    driver: "bridge"
