@@ -55,5 +55,5 @@ export function getImpressionByTime(ts: string): Impressions[] {
 }
 
 export function getAllIds(): Impressions["device_id"][] {
-  return data.map(elm => elm.device_id);
+  return Array.from(new Set(data.map(elm => elm.device_id))).sort();
 }
