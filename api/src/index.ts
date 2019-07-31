@@ -3,8 +3,9 @@ import * as cors from "cors";
 import * as path from "path";
 import { handleHealth } from "./routes/health";
 import { handleimpressionById } from "./routes/impressionById";
-import { parseCsvFile } from "./service/readFile";
 import { handleimpressionByTime } from "./routes/impressionByTime";
+import { parseCsvFile } from "./service/readFile";
+import { handleGetAllId } from "./routes/getAllIds";
 
 parseCsvFile();
 
@@ -19,6 +20,8 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 app.get("/health", handleHealth);
+
+app.get("/getAllIds", handleGetAllId);
 
 app.get("/getById", handleimpressionById);
 

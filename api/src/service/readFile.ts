@@ -53,3 +53,7 @@ export function getImpressionByTime(ts: string): Impressions[] {
     return diff <= 60;
   });
 }
+
+export function getAllIds(): Impressions["device_id"][] {
+  return data.map(elm => elm.device_id);
+}
