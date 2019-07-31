@@ -6,7 +6,7 @@ const Fetch: React.FC = () => {
   const [data, setData] = useState({});
 
   async function fetchData() {
-    const res = await fetch("/api/fetch/");
+    const res = await fetch("/api/health/");
     res
       .json()
       .then(res => setData(res))
