@@ -1,8 +1,8 @@
 import React from "react";
 import { Table } from "rsuite";
 import { toDate } from "date-fns";
+import { Impression } from "../model";
 
-import { Impression } from "../../../api/src/models/csv";
 
 const { Column, HeaderCell, Cell } = Table;
 

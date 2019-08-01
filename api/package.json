@@ -6,7 +6,8 @@
   "scripts": {
     "start": "yarn build --project tsconfig-dev.json && concurrently -n tsc,node \"yarn tsc-watch\" \"yarn start-nodemon\"",
     "start-nodemon": "nodemon build",
-    "build": "tsc --project tsconfig.json",
+    "build": "yarn copy-data && tsc --project tsconfig.json",
+    "copy-data": " mkdir -p build && cp -ap src/data build",
     "tsc-watch": "tsc --project tsconfig-dev.json -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

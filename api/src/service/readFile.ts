@@ -7,9 +7,14 @@ import { fromUnixTime, isWithinInterval } from "date-fns";
 
 import { Impression } from "../models/csv";
 
-const file = fs.createReadStream("src/data/dataset.csv");
+const filePath =
+  process.env.NODE_ENV === "production"
+    ? "build/data/dataset.csv"
+    : "src/data/dataset.csv";
 
-const data: Impressions[] = [];
+const file = fs.createReadStream(filePath);
+
+const data: Impression[] = [];
 
 export function parseCsvFile() {
   papa.parse(file, {
@@ -37,11 +42,11 @@ export function parseCsvFile() {
   });
 }
 
-export function getImpressionById(id: string): Impressions[] {
+export function getImpressionById(id: string): Impression[] {
   return data.filter(({ device_id }) => device_id === id);
 }
 
-export function getImpressionByTime(from: string, to: string): Impressions[] {
+export function getImpressionByTime(from: string, to: string): Impression[] {
   const dateFrom = fromUnixTime(parseInt(from, 10));
   const dateTo = fromUnixTime(parseInt(to, 10));
 
@@ -53,6 +58,6 @@ export function getImpressionByTime(from: string, to: string): Impressions[] {
   });
 }
 
-export function getAllIds(): Impressions["device_id"][] {
+export function getAllIds(): Impression["device_id"][] {
   return Array.from(new Set(data.map(elm => elm.device_id))).sort();
 }

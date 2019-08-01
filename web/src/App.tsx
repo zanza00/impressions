@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import { Impression } from "../../api/src/models/csv";
-
 import Error from "./Components/Error";
 import Table from "./Components/Table";
 import DeviceFilter from "./Components/DeviceFilter";
@@ -11,7 +9,7 @@ import "rsuite/dist/styles/rsuite.min.css";
 import "./App.css";
 import TimeFilter from "./Components/TimeFilter";
 import { addTime } from "./helpers";
-import { TimeAmountAndType } from "./model";
+import { TimeAmountAndType, Impression } from "./model";
 
 const App: React.FC = () => {
   const [hasError, setErrors] = useState(false);
