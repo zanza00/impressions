@@ -1,3 +1,13 @@
 .Error {
-    background-color: Red;
+  background-color: palevioletred;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #242424
+}
+
+.Error > div {
+  margin: 5px;
 }
