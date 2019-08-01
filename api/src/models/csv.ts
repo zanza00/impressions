@@ -11,8 +11,8 @@ export type Impressions = t.TypeOf<typeof Impressions>;
 export const QueryId = t.string;
 export type QueryId = t.TypeOf<typeof QueryId>;
 
-
-export const TimeFrom = t.string;
+export const TimeFrom = t.type({
+  from: t.string,
+  to: t.string,
+});
 export type TimeFrom = t.TypeOf<typeof TimeFrom>;
-
-

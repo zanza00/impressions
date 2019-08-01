@@ -10,13 +10,13 @@ export function handleimpressionByTime(
   res: express.Response,
 ) {
   pipe(
-    TimeFrom.decode(req.query.from),
+    TimeFrom.decode(req.query),
     fold(
       _e => {
         res.status(422).send({ errors: { from: "must be a string" } });
       },
-      timestamp => {
-        const resp = getImpressionByTime(timestamp);
+      ({ from, to }) => {
+        const resp = getImpressionByTime(from, to);
         return res.send(resp);
       },
     ),

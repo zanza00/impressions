@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, InputPicker, Table, DatePicker } from "rsuite";
+import { Button, InputPicker, Table, DatePicker, InputNumber } from "rsuite";
+import { addHours, addDays, addMonths, toDate } from "date-fns";
 
 import Error from "./Components/Error";
 
@@ -15,6 +16,31 @@ type Impression = {
   timestamp: string;
 };
 
+type TimeAmountAndType = { amount: number; type: "hour" | "day" | "month" };
+
+type CellProps = {
+  dataKey: string;
+  rowIndex?: number;
+  rowData?: object;
+};
+// typings in this particular instance are bad
+const DateCell = ({ rowData, dataKey, ...props }: CellProps) => {
+  // @ts-ignore
+  const d = toDate(parseInt(rowData[dataKey], 10));
+  return <Cell {...props}>{d.toISOString()}</Cell>;
+};
+
+function addTime(from: number, { amount, type }: TimeAmountAndType): number {
+  switch (type) {
+    case "day":
+      return addDays(new Date(from), amount).getTime();
+    case "hour":
+      return addHours(new Date(from), amount).getTime();
+    case "month":
+      return addMonths(new Date(from), amount).getTime();
+  }
+}
+
 const App: React.FC = () => {
   const [hasError, setErrors] = useState(false);
 
@@ -22,7 +48,11 @@ const App: React.FC = () => {
   const [impression, setImpression] = useState<Impression[]>([]);
 
   const [deviceId, setDeviceId] = useState(0);
-  const [time, setTime] = useState(0);
+  const [startTime, setStartTime] = useState(0);
+  const [timeRange, setTimeRange] = useState<TimeAmountAndType>({
+    amount: 1,
+    type: "hour",
+  });
 
   async function getIds() {
     const res = await fetch("/api/getAllIds/");
@@ -39,8 +69,12 @@ const App: React.FC = () => {
       .then(res => setImpression(res))
       .catch(() => setErrors(true));
   }
-  async function getImpressionByTime(from: number) {
-    const res = await fetch(`/api/getByTime?from=${from}`);
+  async function getImpressionByTime(
+    from: number,
+    amountAndTime: TimeAmountAndType,
+  ) {
+    const to = addTime(from, amountAndTime);
+    const res = await fetch(`/api/getByTime?from=${from}&to=${to}`);
     res
       .json()
       .then(res => setImpression(res))
@@ -59,7 +93,7 @@ const App: React.FC = () => {
         <>
           <div className="Header">
             <div className="Left">
-              Select a device Id <br />
+              <h2>Select a device Id</h2>
               <InputPicker
                 style={{ width: 250 }}
                 data={idList.map(a => ({ value: a, label: a }))}
@@ -67,6 +101,7 @@ const App: React.FC = () => {
                   setDeviceId(value);
                 }}
               />
+              <br />
               <Button
                 disabled={deviceId === 0}
                 onClick={() => {
@@ -77,30 +112,59 @@ const App: React.FC = () => {
                 Select ID
               </Button>
             </div>
-            <div>OR</div>
+            <div style={{ display: "flex", alignItems: "center" }}>OR</div>
             <div className="Right">
-              Select a time <br />
-              <DatePicker
-                format="YYYY-MM-DD HH:mm:ss"
-                ranges={[
-                  {
-                    label: "Now",
-                    value: new Date(),
-                  },
-                ]}
-                onOk={v => {
-                  console.log(v.getTime());
-                  setTime(v.getTime());
-                }}
-              />
+              <h2>Select a start time and a range</h2>
+              <div>
+                Start Time:
+                <DatePicker
+                  format="YYYY-MM-DD HH:mm:ss"
+                  ranges={[
+                    {
+                      label: "Now",
+                      value: new Date(),
+                    },
+                  ]}
+                  onOk={v => {
+                    setStartTime(v.getTime());
+                  }}
+                />
+              </div>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                Range:
+                <span>
+                  <InputNumber
+                    style={{ width: 80 }}
+                    defaultValue={1}
+                    max={100}
+                    min={1}
+                    onChange={amount => {
+                      setTimeRange({ amount, type: timeRange.type });
+                    }}
+                  />
+                </span>
+                <span>
+                  <InputPicker
+                    style={{ width: 150 }}
+                    defaultValue={"hour"}
+                    data={["hour", "day", "month"].map(a => ({
+                      value: a,
+                      label: a,
+                    }))}
+                    onSelect={type => {
+                      setTimeRange({ amount: timeRange.amount, type });
+                    }}
+                  />
+                </span>
+              </div>
               <Button
-                disabled={time === 0}
+                disabled={startTime === 0}
                 onClick={() => {
-                  getImpressionByTime(time);
+                  getImpressionByTime(startTime, timeRange);
                 }}
                 color="blue"
               >
-                Select Hour
+                Select {timeRange.type}
               </Button>
             </div>
           </div>
@@ -120,7 +184,7 @@ const App: React.FC = () => {
               </Column>
               <Column width={200}>
                 <HeaderCell>Date</HeaderCell>
-                <Cell dataKey="timestamp" />
+                <DateCell dataKey="timestamp" />
               </Column>
             </Table>
           </div>

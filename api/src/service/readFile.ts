@@ -3,7 +3,7 @@ import * as papa from "papaparse";
 
 import { pipe } from "fp-ts/lib/pipeable";
 import { fold } from "fp-ts/lib/Either";
-import { differenceInMinutes, fromUnixTime } from "date-fns";
+import { fromUnixTime, isWithinInterval } from "date-fns";
 
 import { Impressions } from "../models/csv";
 
@@ -41,16 +41,15 @@ export function getImpressionById(id: string): Impressions[] {
   return data.filter(({ device_id }) => device_id === id);
 }
 
-export function getImpressionByTime(ts: string): Impressions[] {
-  const dateFrom = fromUnixTime(parseInt(ts, 10));
+export function getImpressionByTime(from: string, to: string): Impressions[] {
+  const dateFrom = fromUnixTime(parseInt(from, 10));
+  const dateTo = fromUnixTime(parseInt(to, 10));
 
-  differenceInMinutes;
   return data.filter(({ timestamp }) => {
-    const diff = differenceInMinutes(
-      fromUnixTime(parseInt(timestamp, 10)),
-      dateFrom,
-    );
-    return diff <= 60;
+    return isWithinInterval(fromUnixTime(parseInt(timestamp, 10)), {
+      start: dateFrom,
+      end: dateTo,
+    });
   });
 }
 
