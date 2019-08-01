@@ -1,0 +1,12 @@
+.TimeFilter > div {
+  margin: 10px;
+}
+
+.TimeFilter > button {
+  margin: 5px;
+}
+
+.TimeRange {
+  display: flex;
+  align-items: center;
+}

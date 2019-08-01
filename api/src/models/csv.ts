@@ -1,12 +1,12 @@
 import * as t from "io-ts";
 
-export const Impressions = t.type({
+export const Impression = t.type({
   device_id: t.string,
   lat: t.string,
   lng: t.string,
   timestamp: t.string,
 });
-export type Impressions = t.TypeOf<typeof Impressions>;
+export type Impression = t.TypeOf<typeof Impression>;
 
 export const QueryId = t.string;
 export type QueryId = t.TypeOf<typeof QueryId>;

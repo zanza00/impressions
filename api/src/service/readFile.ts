@@ -5,7 +5,7 @@ import { pipe } from "fp-ts/lib/pipeable";
 import { fold } from "fp-ts/lib/Either";
 import { fromUnixTime, isWithinInterval } from "date-fns";
 
-import { Impressions } from "../models/csv";
+import { Impression } from "../models/csv";
 
 const file = fs.createReadStream("src/data/dataset.csv");
 
@@ -17,7 +17,7 @@ export function parseCsvFile() {
     header: true,
     step: result => {
       pipe(
-        Impressions.decode(result.data),
+        Impression.decode(result.data),
         fold(
           e => {
             console.warn("found errors while decoding", e);
