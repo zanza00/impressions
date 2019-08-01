@@ -22,7 +22,7 @@ export const DateCell = ({ rowData, dataKey, ...props }: CellProps) => {
 
 export default ({ data = [] }: { data: Impression[] }) => (
   <div>
-    <Table height={400} data={data} virtualized>
+    <Table autoHeight data={data} virtualized>
       <Column width={70} align="center" fixed>
         <HeaderCell>Id</HeaderCell>
         <Cell dataKey="device_id" />
